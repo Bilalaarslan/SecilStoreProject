@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SecilStoreProject.Interface.Repositories;
+namespace SecilStoreProjectDal.Interface.Repositories;
 
 public interface IConfigurationRepository
 {

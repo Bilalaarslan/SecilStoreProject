@@ -7,9 +7,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SecilStoreProject.Business"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SecilStoreProject.Entities", "SecilStoreProject.Entities\SecilStoreProject.Entities.csproj", "{91878B1F-4079-4D3C-8BCF-D13EBFCCA9DD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SecilStoreProject.Interface", "SecilStoreProject.Interface\SecilStoreProject.Interface.csproj", "{8706526E-F794-494D-ACB3-50F2A6B79DC4}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SecilStoreProject.Dal.Interface", "SecilStoreProject.Interface\SecilStoreProject.Dal.Interface.csproj", "{8706526E-F794-494D-ACB3-50F2A6B79DC4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SecilStoreProject.Mongo", "SecilStoreProject.Mongo\SecilStoreProject.Mongo.csproj", "{2D4288C5-1AA5-48A0-89A3-8F57E0422561}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SecilStoreProject.Dal.Mongo", "SecilStoreProject.Mongo\SecilStoreProject.Dal.Mongo.csproj", "{2D4288C5-1AA5-48A0-89A3-8F57E0422561}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

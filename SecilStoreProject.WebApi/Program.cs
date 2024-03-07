@@ -1,3 +1,7 @@
+using Hangfire;
+using Hangfire.Mongo;
+using Hangfire.Mongo.Migration.Strategies;
+using Hangfire.Mongo.Migration.Strategies.Backup;
 using Microsoft.Extensions.Options;
 using SecilStoreProject.Business;
 using SecilStoreProject.Dal.Mongo.Extensions;
@@ -19,6 +23,17 @@ builder.Services.AddSingleton<ConfigurationReader>(serviceProvider =>
 	);
 });
 
+builder.Services.AddHangfire(configuration => configuration.UseMongoStorage(
+    builder.Configuration.GetConnectionString("HangfireConnection"), "hangfireDB",
+    new MongoStorageOptions
+    {
+        MigrationOptions = new MongoMigrationOptions
+        {
+            MigrationStrategy = new MigrateMongoMigrationStrategy(),
+            BackupStrategy = new NoneMongoBackupStrategy()
+        }
+    }));
+
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -38,5 +53,13 @@ app.UseHttpsRedirection();
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.UseHangfireDashboard();
+
+
+app.Services.GetRequiredService<IRecurringJobManager>().AddOrUpdate(
+    "CheckConfigUpdates",
+    () => app.Services.GetRequiredService<ConfigurationReader>().CheckForUpdatesAndNotify(),
+    Cron.MinuteInterval(1));
 
 app.Run();

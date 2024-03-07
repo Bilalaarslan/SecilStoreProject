@@ -25,7 +25,24 @@ public class ConfigurationReader
 		StartRefreshTask();
 	}
 
-	private void StartRefreshTask()
+    public async Task CheckForUpdatesAndNotify()
+    {
+        var latestUpdate = _cache.Values.Any() ? _cache.Values.OrderByDescending(v => v.LastUpdated).First().LastUpdated : DateTime.MinValue;
+
+
+        var filter = Builders<ConfigurationModel>.Filter.Eq(c => c.ApplicationName, _applicationName) &
+                     Builders<ConfigurationModel>.Filter.Gt(c => c.LastUpdated, latestUpdate);
+
+        var updates = await _configurations.Find(filter).ToListAsync();
+
+        foreach (var update in updates)
+        {
+            _cache.AddOrUpdate(update.Name, (update.Value, DateTime.UtcNow), (key, oldValue) => (update.Value, DateTime.UtcNow));
+
+        }
+    }
+
+    private void StartRefreshTask()
 	{
 		Task.Run(async () =>
 		{

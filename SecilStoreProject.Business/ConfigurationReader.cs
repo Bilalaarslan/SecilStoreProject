@@ -37,7 +37,6 @@ public class ConfigurationReader
 				}
 				catch (Exception ex)
 				{
-					// Log exception
 					Console.WriteLine($"An error occurred during configuration refresh: {ex.Message}");
 				}
 				await Task.Delay(_refreshInterval);

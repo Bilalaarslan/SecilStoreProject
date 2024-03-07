@@ -19,7 +19,6 @@ namespace SecilStoreProject.WebApi.Controllers
 			_configurationReader = configurationReader;
 		}
 
-		// GET: api/configuration/{applicationName}
 		[HttpGet("{applicationName}")]
 		public async Task<IActionResult> GetAllConfigurations(string applicationName)
 		{
@@ -30,18 +29,16 @@ namespace SecilStoreProject.WebApi.Controllers
 			}
 			catch (Exception ex)
 			{
-				// Log exception
 				return StatusCode(500, $"Internal server error: {ex.Message}");
 			}
 		}
 
-		// GET: api/configuration/value/{key}
 		[HttpGet("value/{key}")]
 		public IActionResult GetConfigurationValue(string key)
 		{
 			try
 			{
-				var value = _configurationReader.GetValue<string>(key); // Assuming the value is of type string for demonstration
+				var value = _configurationReader.GetValue<string>(key); 
 				return Ok(value);
 			}
 			catch (KeyNotFoundException knfEx)
@@ -50,12 +47,11 @@ namespace SecilStoreProject.WebApi.Controllers
 			}
 			catch (Exception ex)
 			{
-				// Log exception
+				
 				return StatusCode(500, $"Internal server error: {ex.Message}");
 			}
 		}
 
-		// POST: api/configuration
 		[HttpPost]
 		public async Task<IActionResult> CreateConfiguration([FromBody] ConfigurationModel configurationModel)
 		{
@@ -66,12 +62,10 @@ namespace SecilStoreProject.WebApi.Controllers
 			}
 			catch (Exception ex)
 			{
-				// Log exception
 				return StatusCode(500, $"Internal server error: {ex.Message}");
 			}
 		}
 
-		// PUT: api/configuration
 		[HttpPut]
 		public async Task<IActionResult> UpdateConfiguration([FromBody] ConfigurationModel configurationModel)
 		{
@@ -87,12 +81,10 @@ namespace SecilStoreProject.WebApi.Controllers
 			}
 			catch (Exception ex)
 			{
-				// Log exception
 				return StatusCode(500, $"Internal server error: {ex.Message}");
 			}
 		}
 
-		// DELETE: api/configuration/{id}
 		[HttpDelete("{id}")]
 		public async Task<IActionResult> DeleteConfiguration(string id)
 		{
@@ -108,7 +100,6 @@ namespace SecilStoreProject.WebApi.Controllers
 			}
 			catch (Exception ex)
 			{
-				// Log exception
 				return StatusCode(500, $"Internal server error: {ex.Message}");
 			}
 		}

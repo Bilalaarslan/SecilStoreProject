@@ -9,6 +9,7 @@ namespace SecilStoreProjectDal.Interface.Repositories;
 
 public interface IConfigurationRepository
 {
+    Task<IEnumerable<ConfigurationModel>> GetAllConfigurationsAsync();
     Task<IEnumerable<ConfigurationModel>> GetAllConfigurationsAsync(string applicationName);
     Task<ConfigurationModel> GetConfigurationByIdAsync(string id);
     Task CreateConfigurationAsync(ConfigurationModel configurationModel);

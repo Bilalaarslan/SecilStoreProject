@@ -14,11 +14,10 @@ namespace SecilStoreProject.Ui.Controllers
 			_httpClientFactory = httpClientFactory;
 		}
 
-		public async Task<IActionResult> Index(string applicationName)
+		public async Task<IActionResult> Index()
 		{
-			applicationName ="string";
 			var client = _httpClientFactory.CreateClient();
-			var responseMessage = await client.GetAsync($"https://localhost:7141/api/Configuration/{applicationName}");
+			var responseMessage = await client.GetAsync($"https://localhost:7141/api/Configuration");
 			if (responseMessage.IsSuccessStatusCode)
 			{
 				var jsonData = await responseMessage.Content.ReadAsStringAsync();

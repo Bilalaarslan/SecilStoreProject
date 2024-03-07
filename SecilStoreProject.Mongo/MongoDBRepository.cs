@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Options;
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 using MongoDB.Bson;
 using MongoDB.Driver;
 using SecilStoreProject.Entities.Entities;
@@ -59,4 +60,9 @@ public class MongoDBRepository : IConfigurationRepository
 		return result.IsAcknowledged && result.DeletedCount > 0;
 	}
 
+    public async Task<IEnumerable<ConfigurationModel>> GetAllConfigurationsAsync()
+    {
+        var result = await _configurations.Find(_=> true).ToListAsync();
+        return result;
+    }
 }

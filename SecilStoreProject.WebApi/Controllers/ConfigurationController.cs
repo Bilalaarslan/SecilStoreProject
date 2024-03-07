@@ -33,7 +33,21 @@ namespace SecilStoreProject.WebApi.Controllers
 			}
 		}
 
-		[HttpGet("value/{key}")]
+        [HttpGet]
+        public async Task<IActionResult> GetAllConfigurations()
+        {
+            try
+            {
+                var configurations = await _configurationRepository.GetAllConfigurationsAsync();
+                return Ok(configurations);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
+
+        [HttpGet("value/{key}")]
 		public IActionResult GetConfigurationValue(string key)
 		{
 			try

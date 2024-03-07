@@ -16,7 +16,6 @@ public static class ServiceExtension
 {
 	public static IServiceCollection AddMongoDBServices(this IServiceCollection services, IConfiguration configuration)
 	{
-
 		services.Configure<MongoDBSettings>(configuration.GetSection("MongoDBConnection"));
 
 		services.AddSingleton<IMongoDatabase>(serviceProvider =>
@@ -27,7 +26,6 @@ public static class ServiceExtension
 
 			return client.GetDatabase(settings.DatabaseName);
 		});
-
 
 		services.AddScoped<IConfigurationRepository, MongoDBRepository>();
 

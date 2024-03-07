@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SecilStoreProject.Dal.Inter
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SecilStoreProject.Dal.Mongo", "SecilStoreProject.Mongo\SecilStoreProject.Dal.Mongo.csproj", "{2D4288C5-1AA5-48A0-89A3-8F57E0422561}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SecilStoreProject.WebApi", "SecilStoreProject.WebApi\SecilStoreProject.WebApi.csproj", "{73F5C561-70D0-4352-BA33-8DE27F1046E5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{2D4288C5-1AA5-48A0-89A3-8F57E0422561}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2D4288C5-1AA5-48A0-89A3-8F57E0422561}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2D4288C5-1AA5-48A0-89A3-8F57E0422561}.Release|Any CPU.Build.0 = Release|Any CPU
+		{73F5C561-70D0-4352-BA33-8DE27F1046E5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{73F5C561-70D0-4352-BA33-8DE27F1046E5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{73F5C561-70D0-4352-BA33-8DE27F1046E5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{73F5C561-70D0-4352-BA33-8DE27F1046E5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

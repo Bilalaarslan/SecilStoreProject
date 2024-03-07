@@ -31,23 +31,30 @@ namespace SecilStoreProject.Ui.Controllers
 		[HttpGet]
 		public IActionResult CreateConfiguration()
 		{
-			return View();
+            ConfigurationModel configurationModel=new ConfigurationModel();
+
+            configurationModel.Id = Guid.NewGuid().ToString();
+            return View(configurationModel);
 		}
 
 		[HttpPost]
 		public async Task<IActionResult>CreateConfiguration(ConfigurationModel configurationModel)
 		{
-			var jsonData = JsonConvert.SerializeObject(configurationModel);
-			StringContent content = new StringContent(jsonData, Encoding.UTF8, "application/json");
+            if (ModelState.IsValid)
+            {
+                var jsonData = JsonConvert.SerializeObject(configurationModel);
+                StringContent content = new StringContent(jsonData, Encoding.UTF8, "application/json");
 
-			var client = _httpClientFactory.CreateClient();
-			var responseMessage = await client.PostAsync("https://localhost:7141/api/Configuration/", content);
+                var client = _httpClientFactory.CreateClient();
+                var responseMessage = await client.PostAsync("https://localhost:7141/api/Configuration/", content);
 
-			if (responseMessage.IsSuccessStatusCode)
-			{
-				return RedirectToAction("Index");
-			}
-			return RedirectToAction("Index");
+                if (responseMessage.IsSuccessStatusCode)
+                {
+                    return RedirectToAction("Index");
+                }
+            }
+            return View();
+
 		}
 
 		[HttpGet]

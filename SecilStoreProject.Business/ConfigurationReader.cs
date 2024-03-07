@@ -19,7 +19,7 @@ public class ConfigurationReader
 		_refreshInterval = TimeSpan.FromMilliseconds(refreshTimerIntervalInMs);
 
 		var client = new MongoClient(connectionString);
-		var database = client.GetDatabase("Secil");
+		var database = client.GetDatabase("SecilDataBase");
 		_configurations = database.GetCollection<ConfigurationModel>("SecilDB");
 
 		StartRefreshTask();
@@ -43,25 +43,32 @@ public class ConfigurationReader
 			}
 		});
 	}
+    private async Task RefreshConfigurations()
+    {
+        try
+        {
+            var filter = Builders<ConfigurationModel>.Filter.Eq(c => c.ApplicationName, _applicationName) &
+                         Builders<ConfigurationModel>.Filter.Eq(c => c.IsActive, true);
+            var configurations = await _configurations.Find(filter).ToListAsync();
 
-	private async Task RefreshConfigurations()
+            foreach (var config in configurations)
+            {
+                _cache.AddOrUpdate(config.Name, (config.Value, DateTime.UtcNow), (key, oldValue) => (config.Value, DateTime.UtcNow));
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Could not refresh configurations from MongoDB: {ex.Message}. Continuing with cached values.");
+
+        }
+    }
+
+    public T GetValue<T>(string key)
 	{
-		var filter = Builders<ConfigurationModel>.Filter.Eq(c => c.ApplicationName, _applicationName) &
-					 Builders<ConfigurationModel>.Filter.Eq(c => c.IsActive, true);
-		var configurations = await _configurations.Find(filter).ToListAsync();
+        var filter = Builders<ConfigurationModel>.Filter.Eq(c => c.Name, key) & Builders<ConfigurationModel>.Filter.Eq(c => c.IsActive, true);
+        var configuration = _configurations.Find(filter).FirstOrDefault();
 
-		foreach (var config in configurations)
-		{
-			_cache.AddOrUpdate(config.Name, (config.Value, DateTime.UtcNow), (key, oldValue) => (config.Value, DateTime.UtcNow));
-		}
-	}
-
-	public T GetValue<T>(string key)
-	{
-		var filter = Builders<ConfigurationModel>.Filter.Eq(c => c.Name, key) & Builders<ConfigurationModel>.Filter.Eq(c => c.IsActive, true);
-		var configuration = _configurations.Find(filter).FirstOrDefault();
-
-		if (configuration == null)
+        if (configuration == null)
 		{
 			throw new KeyNotFoundException($"Configuration key '{key}' not found for application '{_applicationName}'.");
 		}
@@ -69,17 +76,13 @@ public class ConfigurationReader
 		try
 		{
 
-			// Değeri T tipine dönüştürmek için daha genel bir yaklaşım
-			// JSON deserialize yerine, Convert.ChangeType kullanılıyor.
-			// T'nin değer tipi olduğu durumlar için (null olamayan tipler), varsayılan değeri döndürür
 			var typeInfo = typeof(T).GetTypeInfo();
 			if (typeInfo.IsValueType && Nullable.GetUnderlyingType(typeof(T)) == null && string.IsNullOrEmpty(configuration.Value))
 			{
-				return default(T); // veya 'throw new InvalidOperationException' eğer null döndürmek istemiyorsanız
+				return default(T);
 			}
 			else
 			{
-				// Basit tipler için Convert.ChangeType, daha karmaşık tipler için JsonConvert.DeserializeObject kullanılabilir
 				return (T)Convert.ChangeType(configuration.Value, typeof(T));
 			}
 		}

@@ -14,5 +14,4 @@ public interface IConfigurationRepository
     Task CreateConfigurationAsync(ConfigurationModel configurationModel);
     Task<bool> UpdateConfigurationAsync(ConfigurationModel configurationModel);
     Task<bool> DeleteAsync(string id);
-
 }

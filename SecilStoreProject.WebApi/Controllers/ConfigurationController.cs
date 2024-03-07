@@ -103,5 +103,23 @@ namespace SecilStoreProject.WebApi.Controllers
 				return StatusCode(500, $"Internal server error: {ex.Message}");
 			}
 		}
-	}
+
+		[HttpGet("GetConfigurationById/{id}")]
+        public async Task<IActionResult> GetConfigurationByIdAsync(string id)
+		{
+
+			try
+			{
+                var configurations = await _configurationRepository.GetConfigurationByIdAsync(id);
+                return Ok(configurations);
+
+            }
+			catch (Exception ex)
+			{
+
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+		}
+        
+    }
 }

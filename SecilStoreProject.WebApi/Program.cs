@@ -17,9 +17,9 @@ builder.Services.AddSingleton<ConfigurationReader>(serviceProvider =>
 {
 	var mongoSettings = serviceProvider.GetService<IOptions<MongoDBSettings>>().Value;
 	return new ConfigurationReader(
-		applicationName: "Secil", // Bu deðeri uygun þekilde deðiþtirin
+		applicationName: "Secil", 
 		connectionString: mongoSettings.ConnectionString,
-		refreshTimerIntervalInMs: 60000 // Örneðin, 60 saniye
+		refreshTimerIntervalInMs: 60000 
 	);
 });
 
@@ -60,6 +60,6 @@ app.UseHangfireDashboard();
 app.Services.GetRequiredService<IRecurringJobManager>().AddOrUpdate(
     "CheckConfigUpdates",
     () => app.Services.GetRequiredService<ConfigurationReader>().CheckForUpdatesAndNotify(),
-    Cron.MinuteInterval(1));
+    Cron.MinuteInterval(2));
 
 app.Run();

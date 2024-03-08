@@ -1,5 +1,6 @@
 ﻿using MongoDB.Driver;
 using SecilStoreProject.Entities.Entities;
+using SecilStoreProject.Entities.Enums;
 using System.Collections.Concurrent;
 using System.Reflection;
 using System.Text.Json;
@@ -81,32 +82,34 @@ public class ConfigurationReader
     }
 
     public T GetValue<T>(string key)
-	{
-        var filter = Builders<ConfigurationModel>.Filter.Eq(c => c.Name, key) & Builders<ConfigurationModel>.Filter.Eq(c => c.IsActive, true);
-        var configuration = _configurations.Find(filter).FirstOrDefault();
+    {
+        var configuration = _configurations.Find(Builders<ConfigurationModel>.Filter.Eq(c => c.Name, key) & Builders<ConfigurationModel>.Filter.Eq(c => c.IsActive, true)).FirstOrDefault();
 
         if (configuration == null)
-		{
-			throw new KeyNotFoundException($"Configuration key '{key}' not found for application '{_applicationName}'.");
-		}
+        {
+            throw new KeyNotFoundException($"Configuration key '{key}' not found for application '{_applicationName}'.");
+        }
 
-		try
-		{
-
-			var typeInfo = typeof(T).GetTypeInfo();
-			if (typeInfo.IsValueType && Nullable.GetUnderlyingType(typeof(T)) == null && string.IsNullOrEmpty(configuration.Value))
-			{
-				return default(T);
-			}
-			else
-			{
-				return (T)Convert.ChangeType(configuration.Value, typeof(T));
-			}
-		}
-		catch (JsonException ex)
-		{
-			throw new InvalidOperationException($"Error deserializing configuration value for key '{key}': {ex.Message}", ex);
-		}
-	}
+        try
+        {
+            switch (configuration.Type)
+            {
+                case ConfigurationValueType.String:
+                    return (T)Convert.ChangeType(configuration.Value, typeof(T));
+                case ConfigurationValueType.Int:
+                    return (T)Convert.ChangeType(int.Parse(configuration.Value), typeof(T));
+                case ConfigurationValueType.Bool:
+                    return (T)Convert.ChangeType(bool.Parse(configuration.Value), typeof(T));
+                case ConfigurationValueType.Double:
+                    return (T)Convert.ChangeType(double.Parse(configuration.Value), typeof(T));
+                default:
+                    throw new InvalidOperationException($"Unsupported configuration type '{configuration.Type}' for key '{key}'.");
+            }
+        }
+        catch (Exception ex)
+        {
+            throw new InvalidOperationException($"Error processing configuration value for key '{key}': {ex.Message}", ex);
+        }
+    }
 
 }
